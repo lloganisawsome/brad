@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Robot Setup</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: #000;
+    color: #fff;
+    font-family: monospace;
+    text-align: center;
+  }
+  button {
+    margin: 15px;
+    padding: 20px 40px;
+    font-size: 1.5em;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    background: #00ff88;
+    color: #000;
+  }
+  button:hover {
+    background: #00cc66;
+  }
+</style>
+</head>
+<body>
+<h1>Welcome to Your Robot!</h1>
+<p>Which screen is this?</p>
+<button onclick="goToScreen('kindle.html')">Eyes (Kindle)</button>
+<button onclick="goToScreen('iphone.html')">Heart (iPhone)</button>
+
+<script>
+function goToScreen(file) {
+  window.location.href = file;
+}
+</script>
+</body>
+</html>
