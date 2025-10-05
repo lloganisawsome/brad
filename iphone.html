@@ -1,6 +1,96 @@
 <!DOCTYPE html>
-<html>
-  <body>
-      <p>page1</p>
-  </body>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Robot Heart</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    touch-action: none;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: monospace;
+    color: #fff;
+  }
+  #background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+  .button {
+    margin: 10px;
+    padding: 15px 30px;
+    font-size: 1.5em;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    background: #00ff88;
+    color: #000;
+    z-index: 1;
+  }
+  .button:hover {
+    background: #00cc66;
+  }
+</style>
+</head>
+<body>
+
+<img id="background" src="heart.gif">
+
+<button class="button" id="btnBlink">Blink</button>
+<button class="button" id="btnLook">Look</button>
+<button class="button" id="btnHappy">Happy</button>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.2/firebase-app.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.6.2/firebase-database.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyAc8SdETOvK9lUxe6t9961eOuaLrE0fzoM",
+  authDomain: "fourcorrners.firebaseapp.com",
+  databaseURL: "https://fourcorrners-default-rtdb.firebaseio.com",
+  projectId: "fourcorrners",
+  storageBucket: "fourcorrners.firebasestorage.app",
+  messagingSenderId: "274667131636",
+  appId: "1:274667131636:web:ee6b135602337148bbc4a1",
+  measurementId: "G-S9SZ97T647"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// Function to set emotion
+function setEmotion(emotion) {
+  set(ref(db, 'emotion'), { current: emotion });
+}
+
+// Button event listeners
+document.getElementById('btnBlink').addEventListener('click', () => setEmotion('blink'));
+document.getElementById('btnLook').addEventListener('click', () => setEmotion('look'));
+document.getElementById('btnHappy').addEventListener('click', () => setEmotion('happy'));
+
+// Swipe left for custom emotion
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+document.addEventListener('touchend', e => {
+  touchEndX = e.changedTouches[0].screenX;
+  if (touchEndX < touchStartX - 50) {
+    const custom = prompt("Enter custom emotion name:");
+    if (custom) setEmotion(custom);
+  }
+});
+</script>
+</body>
 </html>
