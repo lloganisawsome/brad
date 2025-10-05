@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Robot Eyes</title>
 <style>
   body, html {
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    touch-action: none;
     background: #000;
+    overflow: hidden;
   }
   #background {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
     object-fit: cover;
     z-index: 0;
   }
   video, img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    display: none;
   }
 </style>
 </head>
 <body>
+<img id="background" src="heart.png" alt="bg" />
 
-<img src="heart.png" id="background">
-
-<video id="blink" src="blink.mp4" autoplay loop muted style="z-index:1;"></video>
-<video id="look" src="look.mp4" autoplay loop muted style="display:none; z-index:2;"></video>
-<img id="happy" src="happy.png" style="display:none; z-index:3; width:50%; height:auto;">
+<video id="blink" src="blink.mp4" autoplay loop muted></video>
+<video id="look" src="look.mp4" autoplay loop muted></video>
+<img id="happy" src="happy.png" />
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.2/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.6.2/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
 
-// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAc8SdETOvK9lUxe6t9961eOuaLrE0fzoM",
   authDomain: "fourcorrners.firebaseapp.com",
@@ -51,30 +51,27 @@ const firebaseConfig = {
   measurementId: "G-S9SZ97T647"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const emotionRef = ref(db, 'emotion/current');
+const emotionRef = ref(db, "emotion/current");
 
-const blink = document.getElementById('blink');
-const look = document.getElementById('look');
-const happy = document.getElementById('happy');
+const blink = document.getElementById("blink");
+const look = document.getElementById("look");
+const happy = document.getElementById("happy");
 
-// Update display based on Firebase emotion
-onValue(emotionRef, (snapshot) => {
-  const emotion = snapshot.val();
+function hideAll() {
+  blink.style.display = "none";
+  look.style.display = "none";
+  happy.style.display = "none";
+}
 
-  blink.style.display = 'none';
-  look.style.display = 'none';
-  happy.style.display = 'none';
-
-  if (emotion === 'blink') blink.style.display = 'block';
-  else if (emotion === 'look') look.style.display = 'block';
-  else if (emotion === 'happy') happy.style.display = 'block';
-  else {
-    // For custom emotions, you can map additional images/videos
-    console.log("Custom emotion:", emotion);
-  }
+onValue(emotionRef, (snap) => {
+  hideAll();
+  const emotion = snap.val();
+  if (emotion === "blink") blink.style.display = "block";
+  else if (emotion === "look") look.style.display = "block";
+  else if (emotion === "happy") happy.style.display = "block";
+  else console.log("Custom emotion:", emotion);
 });
 </script>
 </body>
